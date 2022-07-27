@@ -26,6 +26,9 @@ public class ModItems {
     public static final Item TURNIP = registerItem("turnip",
             new Item(new FabricItemSettings().group(ModItemGroups.COURSE).food(ModFoodComponents.TURNIP)));
 
+    public static final Item COAL_SLIVER = registerItem("coal_sliver",
+            new Item(new FabricItemSettings().group(ModItemGroups.COURSE)));
+
     //registerItem name needs to be all lowercase
     private static Item registerItem(String name, Item item){
         return Registry.register(Registry.ITEM, new Identifier(MCCourseMod.MOD_ID, name), item);

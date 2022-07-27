@@ -2,6 +2,7 @@ package net.amykins.mccourse;
 
 import net.amykins.mccourse.block.ModBlocks;
 import net.amykins.mccourse.item.ModItems;
+import net.amykins.mccourse.util.ModRegistries;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,8 @@ public class MCCourseMod implements ModInitializer {
 
 		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
+
+		ModRegistries.registerModStuffs();
 
 //		LOGGER.info("Hello Fabric world!");
 	}

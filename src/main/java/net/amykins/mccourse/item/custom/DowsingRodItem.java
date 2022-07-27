@@ -1,14 +1,24 @@
 package net.amykins.mccourse.item.custom;
 
+import net.amykins.mccourse.util.ModTags;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class DowsingRodItem extends Item {
 
@@ -26,9 +36,10 @@ public class DowsingRodItem extends Item {
 
             for(int i=0; i <= positionClicked.getY(); i++)
             {
-                Block blockBelow = context.getWorld().getBlockState(positionClicked.down(i)).getBlock();
+                BlockState stateBelow = context.getWorld().getBlockState(positionClicked.down(i));
+                Block blockBelow = stateBelow.getBlock();
 
-                if (isValuableBlock(blockBelow))
+                if (isValuableBlock(stateBelow))
                 {
                     outputValueableCoordinates(positionClicked, player, blockBelow);
 
@@ -49,13 +60,27 @@ public class DowsingRodItem extends Item {
         return super.useOnBlock(context);
     }
 
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+
+        if(Screen.hasShiftDown())
+        {
+            tooltip.add(new TranslatableText("item.mccourse.dowsing_rod.tooltip.shift"));
+        }
+        else
+        {
+            tooltip.add(new TranslatableText("item.mccourse.dowsing_rod.tooltip"));
+        }
+
+    }
+
     private void outputValueableCoordinates(BlockPos blockPos, PlayerEntity player, Block blockBelow) {
         player.sendMessage(new LiteralText("Found " + blockBelow.asItem().getName().getString() + " at " +
                 "(" + blockPos.getX() + "," + blockPos.getY() + "," + blockPos.getZ()+ ")"), false);
     }
 
-    private boolean isValuableBlock(Block block)
+    private boolean isValuableBlock(BlockState block)
     {
-        return block == Blocks.COAL_ORE || block == Blocks.COPPER_ORE || block == Blocks.DIAMOND_ORE || block == Blocks.IRON_ORE;
+        return block.isIn(ModTags.Blocks.DOWSING_ROD_DETECTABLE_BLOCKS);
     }
 }
